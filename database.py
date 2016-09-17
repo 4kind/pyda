@@ -1,8 +1,8 @@
 import sqlite3
 from flask import g
 
-class database:
 
+class Database:
     app = None
 
     def __init__(self, app):
@@ -16,12 +16,12 @@ class database:
 
         " 'flask initdb' command available over cli, so no sqlite is needed "
         " creates pyda.db from schema.sql "
+
         @app.cli.command('initdb')
         def initdb_command():
             """Initializes the database."""
             self.init_db()
             print('Initialized the database.')
-
 
     def connect_db(self):
         """Connects to the specific database."""
@@ -42,5 +42,3 @@ class database:
         with self.app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
-
-   
