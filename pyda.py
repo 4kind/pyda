@@ -1,15 +1,30 @@
-import database
 from flask_script import Manager
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object('settings')
 app.config.from_envvar('PYDA_SETTINGS', silent=True)
 
-" create database istance "
-dbs = database.Database(app)
+db = SQLAlchemy(app)
 
 manager = Manager(app)
+
+""" MODELS """
+
+
+class Password(db.Model):
+    __tablename__ = 'passwords'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), index=True, nullable=False, unique=True)
+    username = db.Column(db.String(50))
+    password = db.Column(db.String(50))
+    website = db.Column(db.String(100))
+    description = db.Column(db.String(200))
+
+    def __repr__(self):
+        return '<Password %r>' % self.title
+
 
 """
 ROUTINGS 
@@ -18,9 +33,7 @@ ROUTINGS
 
 @app.route('/')
 def show_passwords():
-    db = dbs.get_db()
-    cur = db.execute('select title, username, password, website, description from passwords order by id desc')
-    passwords = cur.fetchall()
+    passwords = Password.query.all()
     return render_template('show_passwords.html', passwords=passwords)
 
 
@@ -28,11 +41,15 @@ def show_passwords():
 def add_password():
     if not session.get('logged_in'):
         abort(401)
-    db = dbs.get_db()
-    db.execute('insert into passwords (title, username, password, website, description) values (?, ?, ?, ?, ?)',
-               [request.form['title'], request.form['username'], request.form['password'], request.form['website'],
-                request.form['description']])
-    db.commit()
+    password = Password(
+        title=request.form['title'],
+        username=request.form['username'],
+        password=request.form['password'],
+        website=request.form['website'],
+        description=request.form['description'],
+    )
+    db.session.add(password)
+    db.session.commit()
     flash('New Password was successfully posted')
     return redirect(url_for('show_passwords'))
 
