@@ -1,5 +1,4 @@
-pyda.db
 __pycache__
 venv
 .idea
-data.sqlite
+*.sqlite

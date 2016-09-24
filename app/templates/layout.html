@@ -6,9 +6,9 @@
     <div class=metanav>
         <i class="material-icons home">home</i>
         {% if not session.logged_in %}
-        <a href="{{ url_for('login') }}">log in</a>
+        <a href="{{ url_for('main.login') }}">log in</a>
         {% else %}
-        <a href="{{ url_for('logout') }}">log out</a>
+        <a href="{{ url_for('.logout') }}">log out</a>
         {% endif %}
     </div>
     {% for message in get_flashed_messages() %}
