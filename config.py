@@ -4,13 +4,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET KEY') or 'ad8SFAsiu9faASF9sfls32'
-    USERNAME = 'admin'
-    PASSWORD = 'default'
+    SECRET_KEY = os.environ.get('SECRET KEY') or 'Please enter secret Key'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PYDA_MAIL_SUBJECT_PREFIX = '[PyDA]'
-    PYDA_MAIL_SENDER = 'PyDA Admin <kind@posteo.de>'
+    PYDA_MAIL_SENDER = 'PyDA Admin <pyda@admin.de>'
     PYDA_ADMIN = os.environ.get('PYDA_ADMIN')
 
     @staticmethod
