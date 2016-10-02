@@ -44,13 +44,15 @@ def edit_password():
     return render_template("passwords/edit_password.html", form=form)
 
 
-@passwords.route('/delete-password', methods=['GET', 'POST'])
+@passwords.route('/delete-password')
 @permission_required(Permission.WRITE)
 def delete_password():
     p = Password.query.get_or_404(request.args.get('id'))
     if p is not None:
-        db.session.delete(p)
-        db.session.commit()
-    else:
-        flash('The Password does not exist.')
+        if request.args.get('confirm') == '1':
+            db.session.delete(p)
+            db.session.commit()
+            flash('Your password has been deleted.')
+        else:
+            flash({p.id: 'Do you want to delete this password?'}, 'confirm')
     return redirect(url_for('passwords.show_passwords'))

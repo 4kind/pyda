@@ -11,10 +11,6 @@
             <ul>
                 <li><a href="{{ url_for('auth.change_password') }}">Change password</a></li>
             </ul>
-            <p>Passwords</p>
-            <ul>
-                <li><a href="{{ url_for('passwords.show_passwords') }}">Show passwords</a></li>
-            </ul>
         {% else %}
             <h1>Please Login</h1>
         {% endif %}

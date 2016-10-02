@@ -22,7 +22,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li><a href="{{ url_for('passwords.show_passwords') }}">Passwords</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
@@ -38,13 +38,20 @@
 
 {% block content %}
     <div class="container">
-        {% for message in get_flashed_messages() %}
-            <div class="alert alert-warning">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
-
+        {% with errors = get_flashed_messages(category_filter=['message']) %}
+            {% if errors %}
+                <div class="alert alert-warning">
+                    <a class="close" href="{{ url_for(request.endpoint) }}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                    <ul>
+                        {%- for msg in errors %}
+                            <li>{{ msg }}</li>
+                        {% endfor -%}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
         {% block page_content %}{% endblock %}
     </div>
 {% endblock %}
