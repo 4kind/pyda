@@ -1,20 +1,20 @@
 from flask import render_template, redirect, flash, url_for, request
-from flask_login import login_required
 from . import passwords
 from .. import db
-from ..models import Password
+from ..models import Password, Permission
 from .forms import PasswordForm
+from ..decorators import permission_required
 
 
 @passwords.route('/show-passwords')
-@login_required
+@permission_required(Permission.READ)
 def show_passwords():
     passwords_all = Password.query.all()
     return render_template('passwords/show_passwords.html', passwords=passwords_all)
 
 
 @passwords.route('/add-password', methods=['GET', 'POST'])
-@login_required
+@permission_required(Permission.WRITE)
 def add_password():
     form = PasswordForm()
     if form.validate_on_submit():
@@ -27,7 +27,7 @@ def add_password():
 
 
 @passwords.route('/edit-password', methods=['GET', 'POST'])
-@login_required
+@permission_required(Permission.WRITE)
 def edit_password():
     p = Password.query.get_or_404(request.args.get('id'))
     form = PasswordForm(obj=p)
@@ -45,7 +45,7 @@ def edit_password():
 
 
 @passwords.route('/delete-password', methods=['GET', 'POST'])
-@login_required
+@permission_required(Permission.WRITE)
 def delete_password():
     p = Password.query.get_or_404(request.args.get('id'))
     if p is not None:

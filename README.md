@@ -10,8 +10,8 @@
 ## create database
 * python manage.py db upgrade
 
-## create admin user
-*  python manage.py create_user <email> <usernam> <password>
+## create roles
+* python manage.py insert_roles
 
 ## run server
 * python manage.py runserver
