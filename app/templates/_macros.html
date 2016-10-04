@@ -1,0 +1,21 @@
+{% macro confirmation_message_delete(entity_id, url_for_cancel, url_for_delete) %}
+    {% for message in get_flashed_messages(category_filter=['confirm']) %}
+        {% if entity_id|string in message %}
+            <div id="confirm-delete" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            {{ message[entity_id|string] }}
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-default btn-ok"
+                               href="{{ url_for(url_for_cancel) }}">Cancel</a>
+                            <a class="btn btn-danger btn-ok"
+                               href="{{ url_for(url_for_delete, id=entity_id, confirm=1) }}">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
